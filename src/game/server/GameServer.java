@@ -8,7 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class GameServer {
+public class GameServer{
 	public static void main(String[] args) {
 		BufferedReader in = null;
 		PrintWriter out = null;
