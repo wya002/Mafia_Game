@@ -9,7 +9,8 @@ import java.util.Scanner;
 
 public class GameClient {
 
-	public static void main(String[] args) {
+	public static void main(String[] args){
+
 		BufferedReader in = null;
 		PrintWriter out = null;
 		
@@ -19,7 +20,7 @@ public class GameClient {
 		try {
 			socket = new Socket("127.0.0.1", 8080);
 			
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "MS949"));
 			out = new PrintWriter(socket.getOutputStream());
 			
 			while(true) {

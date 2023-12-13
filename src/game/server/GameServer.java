@@ -10,8 +10,6 @@ import java.util.Scanner;
 
 public class GameServer{
 	public static void main(String[] args) {
-		System.out.println("Hello World!");
-		
 		BufferedReader in = null;
 		PrintWriter out = null;
 		
@@ -26,7 +24,7 @@ public class GameServer{
 			socket = serverSocket.accept();
 			
 			System.out.println("Client 연결됨.");
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "MS949"));
 			out = new PrintWriter(socket.getOutputStream());
 			
 			while(true){
