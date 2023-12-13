@@ -3,48 +3,87 @@ package game.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class GameClient {
 
-	public static void main(String[] args){
-
-		BufferedReader in = null;
-		PrintWriter out = null;
-		
+	public void start() {
 		Socket socket = null;
-		Scanner scanner = new Scanner(System.in);
+		BufferedReader in = null;
+		Thread msgThread = null;
+		Scanner scanner = null;
 		
 		try {
 			socket = new Socket("127.0.0.1", 8080);
+			scanner = new Scanner(System.in);
+			System.out.println("[Mafia Game에 입장하셨습니다.]");
+			System.out.println("[사용할 닉네임을 입력해주세요.");
+			System.out.print("닉네임 : ");
+			String name = scanner.nextLine();
+		
+			msgThread = new MsgThread(socket, name);
+			msgThread.start();
 			
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "MS949"));
-			out = new PrintWriter(socket.getOutputStream());
 			
-			while(true) {
-				System.out.print("전송하기>>> ");
-				String outputMessage = scanner.nextLine();
-				out.println(outputMessage);
-				out.flush();
-				if ("quit".equalsIgnoreCase(outputMessage)) break;
-								
-				String inputMessage = in.readLine();
-				System.out.println("From Server: " + inputMessage);
-				if ("quit".equalsIgnoreCase(inputMessage)) break;
-			}
+			while(in != null) {
+					String inputMsg = in.readLine();
+					if(inputMsg == null) break;
+					else {
+						if(("[" + name + "] 님이 퇴장하셨습니다,").equals(inputMsg)) break;
+						System.out.println(inputMsg);
+					}
+				}
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			System.out.println("[서버 접속끊김]");
 		} finally {
 			try {
+				msgThread.interrupt();
+				socket.close();
 				scanner.close();
-				if (socket != null) socket.close();
-				System.out.println("서버연결종료");
 			} catch (IOException e) {
-				System.out.println("소켓통신에러");
+				System.out.println("통신에러");
+			}
+		}	
+		System.out.println("[서버 연결 종료]");
+	}
+	
+	public static void main(String[] args){
+			GameClient player = new GameClient();
+			player.start();
+		}
+}
+
+	class MsgThread extends Thread{
+		Socket socket = null;
+		String name;
+		
+		Scanner scanner = new Scanner(System.in);
+		
+		public MsgThread(Socket socket, String name) {
+			this.socket = socket;
+			this.name = name;
+		}
+		
+		@Override
+		public void run() {
+			try {
+				PrintStream out = new PrintStream(socket.getOutputStream());
+				out.println(name);
+				out.flush();
+				
+				while(true) {
+					String sendMsg = scanner.nextLine();
+					out.println(sendMsg);
+					out.flush();
+					if("quit".equals(sendMsg)) {
+						break;
+					}
+				}
+			}catch(IOException e) {
+				e.printStackTrace();
+				}
 			}
 		}
-	}
-
-}
