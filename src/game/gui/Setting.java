@@ -14,9 +14,9 @@ public class Setting {
 	}
 	
 
-	public ImageIcon resize(ImageIcon icon) {
+	public ImageIcon resize(ImageIcon icon, int width, int hight) {
 		Image img = icon.getImage();
-		Image resizeImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+		Image resizeImg = img.getScaledInstance(width, hight, Image.SCALE_SMOOTH);
 		ImageIcon changeIcon = new ImageIcon(resizeImg);
 		return changeIcon;
 	}

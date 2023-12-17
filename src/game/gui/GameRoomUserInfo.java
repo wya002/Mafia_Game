@@ -22,14 +22,14 @@ public class GameRoomUserInfo extends JPanel {
 	
 	private void init() {
 		lblImage = new JLabel();
-		ImageIcon icon = new ImageIcon("src/game/gui/HumanIcon.png");
-		lblImage.setIcon(setting.resize(icon));
+		ImageIcon icon = new ImageIcon("src/game/gui/MafiaIcon.png");
+		lblImage.setIcon(setting.resize(icon, 100, 100));
 		
 		lblName = new JLabel("이슬짱짱짱");
 		lblName.setFont(new Font(Font.DIALOG, Font.BOLD, 20));
 		lblName.setHorizontalAlignment(JLabel.CENTER);
 		
-		lblRole = new JLabel("시  민");
+		lblRole = new JLabel("*****");
 		lblRole.setFont(new Font(Font.DIALOG, Font.ITALIC, 15));
 		lblRole.setHorizontalAlignment(JLabel.CENTER);
 	}
